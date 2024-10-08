@@ -25,10 +25,10 @@ class UserGetSchema(BaseModel):
 
 
 class UserUpdateSchema(BaseModel):
-    password: str
-
+    password:str
+    new_password:str
     class Config:
-        extra = "forbid" 
+        extra="forbid"
 
 
 
