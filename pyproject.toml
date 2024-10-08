@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "visi"
+version = "0.1.0"
+description = ""
+authors = ["Zarok"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.*"
+SQLAlchemy = "2.0.35"
+psycopg2 = "2.9.9"
+fastapi = "0.115.0"
+uvicorn = "0.31.0"
+python-decouple = "3.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
