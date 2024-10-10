@@ -74,5 +74,4 @@ def check_password_in_db(user_name: str, user_password: str, db : Session):
 
     if not bcrypt.checkpw(user_password.encode('utf-8'), user.password.encode('utf-8')):
         raise IsNotCorrectException()
-
     return {"msg": "Password is correct"}
