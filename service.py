@@ -46,22 +46,24 @@ def get_user_by_username(*, username: str, db : Session):
 
 def change_user_password(user_name:str,data:UserUpdateSchema,db:Session):
     user = db.query(User).filter_by(username=user_name).first()
-    hashed_password = bcrypt.hashpw(data.new_password.encode('utf-8'), bcrypt.gensalt())
+    hashed_password_new = bcrypt.hashpw(data.new_password.encode('utf-8'), bcrypt.gensalt())
     
     if not user:
         raise UserNotFoundException()
     
+    if not bcrypt.checkpw(data.password.encode('utf-8'), user.password.encode('utf-8')):
+        raise IsNotCorrectException()
 
     
-    hashed_password_input = bcrypt.hashpw(data.password.encode('utf-8'), bcrypt.gensalt())
 
-    db.query(User).filter_by(username=user_name,password=hashed_password_input).update({"password":hashed_password})
+    db.query(User).filter_by(username=user_name).update({"password":hashed_password_new.decode('utf-8')})
     
-    #new push
     db.commit()
     db.refresh(user)
 
     return {"msg": "user is updated"}
+
+
 
 def check_password_in_db(user_name: str, user_password: str, db : Session):
     user = db.query(User).filter_by(username=user_name).first()
