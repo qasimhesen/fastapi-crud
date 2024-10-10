@@ -1,3 +1,4 @@
+#en axirinci kod budur
 from models import User
 from schema import UserCreateSchema , UserDeleteSchema, UserGetSchema, UserUpdateSchema
 from sqlalchemy.orm import Session
@@ -60,7 +61,7 @@ def change_user_password(user_name:str,data:UserUpdateSchema,db:Session):
     
     db.commit()
     db.refresh(user)
-
+    
     return {"msg": "user is updated"}
 
 
