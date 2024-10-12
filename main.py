@@ -41,3 +41,9 @@ def update_user(username:str,item:UserUpdateSchema,db: session = Depends(get_db)
 def check_password(username:str , password:str , db: session = Depends(get_db)):
     message = check_password_in_db(user_name = username , user_password = password , db = db)
     return message
+
+
+@app.delete("/all_user")
+def reset_my_base(item:Reset_All_Base,db: Session = Depends(get_db)):
+    message = reset_base(data=item,db=db)
+    return message

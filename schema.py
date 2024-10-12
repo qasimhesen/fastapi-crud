@@ -31,5 +31,11 @@ class UserUpdateSchema(BaseModel):
         extra="forbid"
 
 
+class Reset_All_Base(BaseModel):
+    username:str
+    password:str
+    class Confif:
+        extra = "forbid"
+
 
 

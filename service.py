@@ -1,8 +1,10 @@
 #en axirinci kod budur
 from models import User
-from schema import UserCreateSchema , UserDeleteSchema, UserGetSchema, UserUpdateSchema
+from schema import UserCreateSchema , UserDeleteSchema, UserGetSchema, UserUpdateSchema, Reset_All_Base
 from sqlalchemy.orm import Session
 from exceptions import UserNotFoundException , UserIsAlreadyExistException , IsNotCorrectException
+import psycopg2
+from settings import DATABASE_URL
 
 import bcrypt
 
@@ -75,3 +77,21 @@ def check_password_in_db(user_name: str, user_password: str, db : Session):
     if not bcrypt.checkpw(user_password.encode('utf-8'), user.password.encode('utf-8')):
         raise IsNotCorrectException()
     return {"msg": "Password is correct"}
+
+
+def reset_base(data:Reset_All_Base,db:Session):
+    user = db.query(User).filter_by(username=data.username).first()
+    if not user:
+        raise UserNotFoundException()
+    if not bcrypt.checkpw(password=data.password.encode("utf-8"),hashed_password=user.password.encode("utf-8")):
+        raise UserNotFoundException
+
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+    cur.execute("DELETE FROM users;")
+
+    cur.execute("ALTER SEQUENCE users_id_seq RESTART WITH 1;")
+    conn.commit()
+    cur.close()
+    conn.close()
+    return {"msg":"all user is deleted"}
